@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Universal Stationary</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    /* ── Global ── */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      color: #333;
+    }
+
+    /* ── Navbar ── */
+    .navbar { background: #1a56db; }
+    .navbar-brand { font-size: 22px; font-weight: 700; color: #fff !important; }
+    .nav-link { color: #dce8ff !important; }
+    .nav-link:hover { color: #fff !important; }
+
+    /* ── Hero Banner ── */
+    .hero {
+      background: linear-gradient(135deg, #1a56db 0%, #0e3a9e 100%);
+      color: white;
+      padding: 80px 0;
+      text-align: center;
+    }
+    .hero h1 { font-size: 40px; font-weight: 700; }
+    .hero p  { font-size: 18px; opacity: 0.9; }
+    .hero .btn {
+      background: #ff8c00;
+      border: none;
+      color: white;
+      padding: 12px 32px;
+      font-size: 16px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+    .hero .btn:hover { background: #e67e00; color: white; }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a56db;
+      margin-bottom: 8px;
+    }
+    .section-line {
+      width: 60px;
+      height: 4px;
+      background: #ff8c00;
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+
+    /* ── Category Cards ── */
+    .cat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      height: 100%;
+    }
+    .cat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 24px rgba(26,86,219,0.15);
+    }
+    .cat-icon {
+      font-size: 44px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .cat-card h5 { font-weight: 700; color: #1a56db; margin-bottom: 8px; }
+    .cat-card p  { font-size: 13px; color: #666; margin: 0; }
+
+    /* ── Brand Badges ── */
+    .brand-btn {
+      display: inline-block;
+      padding: 8px 20px;
+      margin: 6px;
+      border: 2px solid #1a56db;
+      border-radius: 30px;
+      color: #1a56db;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: white;
+    }
+    .brand-btn:hover,
+    .brand-btn.active {
+      background: #1a56db;
+      color: white;
+    }
+
+    /* ── Product Cards ── */
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+    .product-card:hover { transform: translateY(-4px); }
+    .product-img {
+      background: #eef2ff;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+    }
+    .product-body { padding: 16px; }
+    .product-body h6 { font-weight: 700; margin-bottom: 4px; }
+    .product-body .brand-tag {
+      font-size: 11px;
+      background: #eef2ff;
+      color: #1a56db;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .product-body .price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ff8c00;
+      margin: 8px 0;
+    }
+    .product-body .btn-detail {
+      background: #1a56db;
+      color: white;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      width: 100%;
+      cursor: pointer;
+    }
+    .product-body .btn-detail:hover { background: #1244b8; }
+
+    /* ── Product Detail Modal ── */
+    .detail-box {
+      display: none;
+      background: white;
+      border: 2px solid #1a56db;
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 16px;
+    }
+    .detail-box.show { display: block; }
+    .feature-badge {
+      display: inline-block;
+      background: #eef2ff;
+      color: #1a56db;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin: 3px;
+      font-weight: 500;
+    }
+
+    /* ── Comparison Table ── */
+    .compare-table th { background: #1a56db; color: white; }
+    .compare-table td { vertical-align: middle; }
+
+    /* ── Downloads ── */
+    .download-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .dl-icon { font-size: 36px; }
+    .download-card h6 { margin: 0 0 4px; font-weight: 700; }
+    .download-card p  { margin: 0; font-size: 13px; color: #666; }
+    .btn-dl {
+      margin-left: auto;
+      background: #ff8c00;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-dl:hover { background: #e67e00; }
+
+    /* ── Contact ── */
+    .contact-info p { margin-bottom: 10px; font-size: 15px; }
+    .contact-info span { font-weight: 600; color: #1a56db; }
+    .form-label { font-weight: 600; font-size: 14px; }
+    .form-control:focus { border-color: #1a56db; box-shadow: 0 0 0 3px rgba(26,86,219,0.15); }
+    .btn-submit {
+      background: #1a56db;
+      color: white;
+      border: none;
+      padding: 10px 32px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .btn-submit:hover { background: #1244b8; }
+
+    /* ── About ── */
+    .about-box {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #1a56db;
+      color: #dce8ff;
+      text-align: center;
+      padding: 24px;
+      margin-top: 60px;
+    }
+    footer a { color: #fff; text-decoration: none; margin: 0 8px; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Page sections hide/show ── */
+    .page { display: none; }
+    .page.active { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════ NAVBAR ════════════ -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="#">📚 Universal Stationary</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon" style="filter:invert(1)"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('home')">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('about')">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('brands')">Brands</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('products')">Products</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('comparison')">Comparison</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('downloads')">Downloads</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('contact')">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ════════════ PAGE: HOME ════════════ -->
+<div id="home" class="page active">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="container">
+      <h1>Welcome to Universal Stationary</h1>
+      <p>Pakistan's trusted stationery store for students, teachers & offices</p>
+      <button class="btn" onclick="showPage('products')">Shop Now</button>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="container py-5">
+    <div class="section-title">Product Categories</div>
+    <div class="section-line"></div>
+    <div class="row g-4">
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card" onclick="showPage('products')">
+          <span class="cat-icon">✏️</span>
+          <h5>Writing Supplies</h5>
+          <p>Pens, Pencils, Markers</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card" onclick="showPage('products')">
+          <span class="cat-icon">📒</span>
+          <h5>Paper Products</h5>
+          <p>Notebooks, Registers</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card" onclick="showPage('products')">
+          <span class="cat-icon">📎</span>
+          <h5>Office Supplies</h5>
+          <p>Staplers, Files, Clips</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card" onclick="showPage('products')">
+          <span class="cat-icon">🎨</span>
+          <h5>Art & Craft</h5>
+          <p>Colors, Brushes, Sketch</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card" onclick="showPage('products')">
+          <span class="cat-icon">🎒</span>
+          <h5>School Supplies</h5>
+          <p>Bags, Erasers, Rulers</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="cat-card" onclick="showPage('brands')">
+          <span class="cat-icon">🏷️</span>
+          <h5>Top Brands</h5>
+          <p>STAPLES, Faber, Deli</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Latest Products (3 cards) -->
+  <div class="container pb-5">
+    <div class="section-title">Latest Products</div>
+    <div class="section-line"></div>
+    <div class="row g-4">
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="product-card">
+          <div class="product-img">✏️</div>
+          <div class="product-body">
+            <span class="brand-tag">Faber-Castell</span>
+            <h6 class="mt-2">Color Pencils Set</h6>
+            <div class="price">Rs. 450</div>
+            <button class="btn-detail" onclick="showDetail('faber-pencil')">View Details</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="product-card">
+          <div class="product-img">📎</div>
+          <div class="product-body">
+            <span class="brand-tag">STAPLES</span>
+            <h6 class="mt-2">Heavy Duty Stapler</h6>
+            <div class="price">Rs. 800</div>
+            <button class="btn-detail" onclick="showDetail('staples-stapler')">View Details</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="product-card">
+          <div class="product-img">📒</div>
+          <div class="product-body">
+            <span class="brand-tag">Dollar</span>
+            <h6 class="mt-2">A4 Notebook 200 Pages</h6>
+            <div class="price">Rs. 250</div>
+            <button class="btn-detail" onclick="showDetail('dollar-notebook')">View Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Detail Box -->
+  <div class="container pb-5">
+    <div id="detail-faber-pencil" class="detail-box">
+      <h4>✏️ Color Pencils Set — Faber-Castell</h4>
+      <p class="text-muted">Category: Art & Craft &nbsp;|&nbsp; Brand: Faber-Castell &nbsp;|&nbsp; Price: <strong>Rs. 450</strong></p>
+      <p>Premium quality color pencils, 24 shades, perfect for students and artists.</p>
+      <div class="mb-2"><strong>Features:</strong></div>
+      <span class="feature-badge">High Quality Material</span>
+      <span class="feature-badge">24 Colors</span>
+      <span class="feature-badge">Smooth Finish</span>
+      <span class="feature-badge">Durable</span>
+      <span class="feature-badge">Easy To Use</span>
+      <div class="mt-3">
+        <button class="btn-submit" onclick="alert('Downloading spec sheet...')">⬇ Download Spec Sheet</button>
+      </div>
+    </div>
+    <div id="detail-staples-stapler" class="detail-box">
+      <h4>📎 Heavy Duty Stapler — STAPLES</h4>
+      <p class="text-muted">Category: Office Supplies &nbsp;|&nbsp; Brand: STAPLES &nbsp;|&nbsp; Price: <strong>Rs. 800</strong></p>
+      <p>Steel body stapler, handles up to 25 sheets, ideal for office use.</p>
+      <div class="mb-2"><strong>Features:</strong></div>
+      <span class="feature-badge">Steel Body</span>
+      <span class="feature-badge">25 Sheet Capacity</span>
+      <span class="feature-badge">6 Month Warranty</span>
+      <span class="feature-badge">Lightweight</span>
+      <div class="mt-3">
+        <button class="btn-submit" onclick="alert('Downloading spec sheet...')">⬇ Download Spec Sheet</button>
+      </div>
+    </div>
+    <div id="detail-dollar-notebook" class="detail-box">
+      <h4>📒 A4 Notebook 200 Pages — Dollar</h4>
+      <p class="text-muted">Category: Paper Products &nbsp;|&nbsp; Brand: Dollar &nbsp;|&nbsp; Price: <strong>Rs. 250</strong></p>
+      <p>200-page ruled notebook, A4 size, hard cover, great for students.</p>
+      <div class="mb-2"><strong>Features:</strong></div>
+      <span class="feature-badge">200 Pages</span>
+      <span class="feature-badge">Hard Cover</span>
+      <span class="feature-badge">A4 Size</span>
+      <span class="feature-badge">Smooth Pages</span>
+      <div class="mt-3">
+        <button class="btn-submit" onclick="alert('Downloading spec sheet...')">⬇ Download Spec Sheet</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /home -->
+
+
+<!-- ════════════ PAGE: ABOUT ════════════ -->
+<div id="about" class="page">
+  <div class="container py-5">
+    <div class="section-title">About Us</div>
+    <div class="section-line"></div>
+    <div class="about-box">
+      <h4 class="mb-3">Who We Are</h4>
+      <p>Universal Stationary ek mashhoor stationery store hai jo students, teachers, offices aur businesses ke liye mukhtalif stationery products provide karta hai.</p>
+      <p>Company pehle pamphlets, TV advertisements aur dusre traditional methods se marketing karti thi. Ab company ne apni products aur services ko online promote karne ke liye yeh website launch ki hai.</p>
+
+      <hr class="my-4" />
+      <h5 class="mb-3" style="color:#1a56db">Our Services</h5>
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">✅ Complete stationery products information</li>
+            <li class="list-group-item">✅ Brand-wise product categories</li>
+            <li class="list-group-item">✅ Product features and specifications</li>
+            <li class="list-group-item">✅ Downloadable product documents</li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-6">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">✅ Product comparison feature</li>
+            <li class="list-group-item">✅ Shop location on Google Maps</li>
+            <li class="list-group-item">✅ Easy contact form</li>
+            <li class="list-group-item">✅ Responsive mobile-friendly design</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /about -->
+
+
+<!-- ════════════ PAGE: BRANDS ════════════ -->
+<div id="brands" class="page">
+  <div class="container py-5">
+    <div class="section-title">Our Brands</div>
+    <div class="section-line"></div>
+    <p class="mb-4 text-muted">Kisi bhi brand par click karein us brand ke products dekhne ke liye:</p>
+
+    <!-- Brand filter buttons -->
+    <div class="mb-4">
+      <span class="brand-btn active" onclick="filterBrand('all', this)">All Brands</span>
+      <span class="brand-btn" onclick="filterBrand('STAPLES', this)">STAPLES</span>
+      <span class="brand-btn" onclick="filterBrand('Dollar', this)">Dollar</span>
+      <span class="brand-btn" onclick="filterBrand('Piano', this)">Piano</span>
+      <span class="brand-btn" onclick="filterBrand('Faber-Castell', this)">Faber-Castell</span>
+      <span class="brand-btn" onclick="filterBrand('Deli', this)">Deli</span>
+      <span class="brand-btn" onclick="filterBrand('Sharpie', this)">Sharpie</span>
+      <span class="brand-btn" onclick="filterBrand('Pelikan', this)">Pelikan</span>
+    </div>
+
+    <!-- Brand products grid -->
+    <div class="row g-4" id="brand-grid">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="STAPLES">
+        <div class="product-card">
+          <div class="product-img">📎</div>
+          <div class="product-body">
+            <span class="brand-tag">STAPLES</span>
+            <h6 class="mt-2">Heavy Duty Stapler</h6>
+            <div class="price">Rs. 800</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="STAPLES">
+        <div class="product-card">
+          <div class="product-img">📁</div>
+          <div class="product-body">
+            <span class="brand-tag">STAPLES</span>
+            <h6 class="mt-2">Office File Folder</h6>
+            <div class="price">Rs. 120</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="STAPLES">
+        <div class="product-card">
+          <div class="product-img">🗂️</div>
+          <div class="product-body">
+            <span class="brand-tag">STAPLES</span>
+            <h6 class="mt-2">Punch Machine</h6>
+            <div class="price">Rs. 350</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="Dollar">
+        <div class="product-card">
+          <div class="product-img">📒</div>
+          <div class="product-body">
+            <span class="brand-tag">Dollar</span>
+            <h6 class="mt-2">A4 Notebook 200 Pages</h6>
+            <div class="price">Rs. 250</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="Dollar">
+        <div class="product-card">
+          <div class="product-img">📝</div>
+          <div class="product-body">
+            <span class="brand-tag">Dollar</span>
+            <h6 class="mt-2">Sticky Notes Pack</h6>
+            <div class="price">Rs. 90</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="Faber-Castell">
+        <div class="product-card">
+          <div class="product-img">✏️</div>
+          <div class="product-body">
+            <span class="brand-tag">Faber-Castell</span>
+            <h6 class="mt-2">Color Pencils 24 Set</h6>
+            <div class="price">Rs. 450</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="Faber-Castell">
+        <div class="product-card">
+          <div class="product-img">🖌️</div>
+          <div class="product-body">
+            <span class="brand-tag">Faber-Castell</span>
+            <h6 class="mt-2">Water Color Set</h6>
+            <div class="price">Rs. 380</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="Deli">
+        <div class="product-card">
+          <div class="product-img">📎</div>
+          <div class="product-body">
+            <span class="brand-tag">Deli</span>
+            <h6 class="mt-2">Stainless Steel Stapler</h6>
+            <div class="price">Rs. 950</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="Piano">
+        <div class="product-card">
+          <div class="product-img">🖊️</div>
+          <div class="product-body">
+            <span class="brand-tag">Piano</span>
+            <h6 class="mt-2">Gel Pen Blue (12 Pack)</h6>
+            <div class="price">Rs. 200</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="Sharpie">
+        <div class="product-card">
+          <div class="product-img">🖋️</div>
+          <div class="product-body">
+            <span class="brand-tag">Sharpie</span>
+            <h6 class="mt-2">Permanent Marker Set</h6>
+            <div class="price">Rs. 320</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-brand="Pelikan">
+        <div class="product-card">
+          <div class="product-img">🎨</div>
+          <div class="product-body">
+            <span class="brand-tag">Pelikan</span>
+            <h6 class="mt-2">Sketch Book A4</h6>
+            <div class="price">Rs. 550</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /brand-grid -->
+  </div>
+</div><!-- /brands -->
+
+
+<!-- ════════════ PAGE: PRODUCTS ════════════ -->
+<div id="products" class="page">
+  <div class="container py-5">
+    <div class="section-title">All Products</div>
+    <div class="section-line"></div>
+    <div class="row g-4">
+
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="product-card">
+          <div class="product-img">✏️</div>
+          <div class="product-body">
+            <span class="brand-tag">Faber-Castell</span>
+            <h6 class="mt-2">Color Pencils Set</h6>
+            <div class="price">Rs. 450</div>
+            <button class="btn-detail" onclick="showDetail('p-faber-pencil')">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="product-card">
+          <div class="product-img">📎</div>
+          <div class="product-body">
+            <span class="brand-tag">STAPLES</span>
+            <h6 class="mt-2">Heavy Duty Stapler</h6>
+            <div class="price">Rs. 800</div>
+            <button class="btn-detail" onclick="showDetail('p-staples-stapler')">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="product-card">
+          <div class="product-img">📒</div>
+          <div class="product-body">
+            <span class="brand-tag">Dollar</span>
+            <h6 class="mt-2">A4 Notebook 200 Pages</h6>
+            <div class="price">Rs. 250</div>
+            <button class="btn-detail" onclick="showDetail('p-dollar-notebook')">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="product-card">
+          <div class="product-img">📎</div>
+          <div class="product-body">
+            <span class="brand-tag">Deli</span>
+            <h6 class="mt-2">Stainless Steel Stapler</h6>
+            <div class="price">Rs. 950</div>
+            <button class="btn-detail" onclick="showDetail('p-deli-stapler')">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="product-card">
+          <div class="product-img">🖊️</div>
+          <div class="product-body">
+            <span class="brand-tag">Piano</span>
+            <h6 class="mt-2">Gel Pen Blue (12 Pack)</h6>
+            <div class="price">Rs. 200</div>
+            <button class="btn-detail" onclick="showDetail('p-piano-gel')">View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="product-card">
+          <div class="product-img">🎒</div>
+          <div class="product-body">
+            <span class="brand-tag">Pelikan</span>
+            <h6 class="mt-2">School Bag</h6>
+            <div class="price">Rs. 2200</div>
+            <button class="btn-detail" onclick="showDetail('p-pelikan-bag')">View Details</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /row -->
+
+    <!-- Product detail boxes -->
+    <div id="detail-p-faber-pencil" class="detail-box mt-4">
+      <h4>✏️ Color Pencils Set — Faber-Castell</h4>
+      <p class="text-muted">Category: Art & Craft &nbsp;|&nbsp; Price: <strong>Rs. 450</strong></p>
+      <p>Premium 24-shade color pencil set for students and artists.</p>
+      <span class="feature-badge">24 Colors</span><span class="feature-badge">Smooth Finish</span>
+      <span class="feature-badge">High Quality</span><span class="feature-badge">Durable</span>
+      <div class="mt-3"><button class="btn-submit" onclick="alert('Downloading...')">⬇ Download Spec Sheet</button></div>
+    </div>
+    <div id="detail-p-staples-stapler" class="detail-box mt-4">
+      <h4>📎 Heavy Duty Stapler — STAPLES</h4>
+      <p class="text-muted">Category: Office Supplies &nbsp;|&nbsp; Price: <strong>Rs. 800</strong></p>
+      <p>Steel body, handles 25 sheets, 6-month warranty.</p>
+      <span class="feature-badge">Steel Body</span><span class="feature-badge">25 Sheets</span>
+      <span class="feature-badge">6M Warranty</span><span class="feature-badge">Lightweight</span>
+      <div class="mt-3"><button class="btn-submit" onclick="alert('Downloading...')">⬇ Download Spec Sheet</button></div>
+    </div>
+    <div id="detail-p-dollar-notebook" class="detail-box mt-4">
+      <h4>📒 A4 Notebook — Dollar</h4>
+      <p class="text-muted">Category: Paper Products &nbsp;|&nbsp; Price: <strong>Rs. 250</strong></p>
+      <p>200-page ruled notebook, hard cover, A4 size.</p>
+      <span class="feature-badge">200 Pages</span><span class="feature-badge">Hard Cover</span>
+      <span class="feature-badge">A4 Size</span><span class="feature-badge">Smooth Pages</span>
+      <div class="mt-3"><button class="btn-submit" onclick="alert('Downloading...')">⬇ Download Spec Sheet</button></div>
+    </div>
+    <div id="detail-p-deli-stapler" class="detail-box mt-4">
+      <h4>📎 Stainless Steel Stapler — Deli</h4>
+      <p class="text-muted">Category: Office Supplies &nbsp;|&nbsp; Price: <strong>Rs. 950</strong></p>
+      <p>Premium stainless steel, 1-year warranty, excellent build quality.</p>
+      <span class="feature-badge">Stainless Steel</span><span class="feature-badge">1 Year Warranty</span>
+      <span class="feature-badge">Excellent Quality</span>
+      <div class="mt-3"><button class="btn-submit" onclick="alert('Downloading...')">⬇ Download Spec Sheet</button></div>
+    </div>
+    <div id="detail-p-piano-gel" class="detail-box mt-4">
+      <h4>🖊️ Gel Pen Blue 12 Pack — Piano</h4>
+      <p class="text-muted">Category: Writing Supplies &nbsp;|&nbsp; Price: <strong>Rs. 200</strong></p>
+      <p>Smooth writing gel pens, 0.7mm tip, 12 pens per pack.</p>
+      <span class="feature-badge">0.7mm Tip</span><span class="feature-badge">Smooth Writing</span>
+      <span class="feature-badge">12 Pack</span><span class="feature-badge">Blue Ink</span>
+      <div class="mt-3"><button class="btn-submit" onclick="alert('Downloading...')">⬇ Download Spec Sheet</button></div>
+    </div>
+    <div id="detail-p-pelikan-bag" class="detail-box mt-4">
+      <h4>🎒 School Bag — Pelikan</h4>
+      <p class="text-muted">Category: School Supplies &nbsp;|&nbsp; Price: <strong>Rs. 2200</strong></p>
+      <p>Spacious school bag, multiple compartments, waterproof material.</p>
+      <span class="feature-badge">Waterproof</span><span class="feature-badge">3 Compartments</span>
+      <span class="feature-badge">Padded Straps</span><span class="feature-badge">Durable</span>
+      <div class="mt-3"><button class="btn-submit" onclick="alert('Downloading...')">⬇ Download Spec Sheet</button></div>
+    </div>
+
+  </div>
+</div><!-- /products -->
+
+
+<!-- ════════════ PAGE: COMPARISON ════════════ -->
+<div id="comparison" class="page">
+  <div class="container py-5">
+    <div class="section-title">Product Comparison</div>
+    <div class="section-line"></div>
+    <p class="text-muted mb-4">Same ya different brands ke products compare karein:</p>
+
+    <div class="table-responsive">
+      <table class="table table-bordered compare-table text-center">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>📎 STAPLES Stapler</th>
+            <th>📎 Deli Stapler</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Price</strong></td><td>Rs. 800</td><td>Rs. 950</td></tr>
+          <tr><td><strong>Quality</strong></td><td>Good</td><td>Excellent</td></tr>
+          <tr><td><strong>Material</strong></td><td>Steel</td><td>Stainless Steel</td></tr>
+          <tr><td><strong>Warranty</strong></td><td>6 Months</td><td>1 Year</td></tr>
+          <tr><td><strong>Capacity</strong></td><td>25 Sheets</td><td>30 Sheets</td></tr>
+          <tr><td><strong>User Rating</strong></td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-responsive mt-4">
+      <table class="table table-bordered compare-table text-center">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>✏️ Faber Color Pencils</th>
+            <th>🖌️ Pelikan Sketch Book</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Price</strong></td><td>Rs. 450</td><td>Rs. 550</td></tr>
+          <tr><td><strong>Category</strong></td><td>Art & Craft</td><td>Art & Craft</td></tr>
+          <tr><td><strong>Material</strong></td><td>Wood + Pigment</td><td>Thick Paper</td></tr>
+          <tr><td><strong>Best For</strong></td><td>Coloring</td><td>Sketching</td></tr>
+          <tr><td><strong>User Rating</strong></td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div><!-- /comparison -->
+
+
+<!-- ════════════ PAGE: DOWNLOADS ════════════ -->
+<div id="downloads" class="page">
+  <div class="container py-5">
+    <div class="section-title">Downloads</div>
+    <div class="section-line"></div>
+    <p class="text-muted mb-4">Product specifications aur catalogues download karein:</p>
+
+    <div class="row g-3">
+      <div class="col-12">
+        <div class="download-card">
+          <span class="dl-icon">📄</span>
+          <div>
+            <h6>STAPLES Products Catalogue</h6>
+            <p>Staplers, Files, Paper Clips — full specifications</p>
+          </div>
+          <button class="btn-dl" onclick="alert('Downloading staples-products.docx...')">⬇ Download</button>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="download-card">
+          <span class="dl-icon">📄</span>
+          <div>
+            <h6>Faber-Castell Product Guide</h6>
+            <p>Color Pencils, Water Colors, Sketch Books</p>
+          </div>
+          <button class="btn-dl" onclick="alert('Downloading faber-castell.docx...')">⬇ Download</button>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="download-card">
+          <span class="dl-icon">📄</span>
+          <div>
+            <h6>Deli Products Specification</h6>
+            <p>Staplers, Calculators, Office Supplies</p>
+          </div>
+          <button class="btn-dl" onclick="alert('Downloading deli-products.docx...')">⬇ Download</button>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="download-card">
+          <span class="dl-icon">📋</span>
+          <div>
+            <h6>Complete Product Catalogue (PDF)</h6>
+            <p>All brands — all products in one file</p>
+          </div>
+          <button class="btn-dl" onclick="alert('Downloading catalogue.pdf...')">⬇ Download PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /downloads -->
+
+
+<!-- ════════════ PAGE: CONTACT ════════════ -->
+<div id="contact" class="page">
+  <div class="container py-5">
+    <div class="section-title">Contact Us</div>
+    <div class="section-line"></div>
+
+    <div class="row g-4">
+      <!-- Info -->
+      <div class="col-12 col-md-4">
+        <div class="about-box contact-info">
+          <h5 class="mb-3" style="color:#1a56db">Get In Touch</h5>
+          <p>📍 <span>Address:</span><br>Shop 12, Mall Road, Lahore, Pakistan</p>
+          <p>📞 <span>Phone:</span><br>+92-300-1234567</p>
+          <p>📧 <span>Email:</span><br>
+            <a href="mailto:info@universalstationary.com" style="color:#1a56db">
+              info@universalstationary.com
+            </a>
+          </p>
+          <p>⏰ <span>Hours:</span><br>Mon–Sat: 9am – 8pm</p>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="col-12 col-md-8">
+        <div class="about-box">
+          <h5 class="mb-3" style="color:#1a56db">Send Us a Message</h5>
+          <div class="mb-3">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-control" placeholder="Enter your name" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-control" placeholder="Enter your email" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Subject</label>
+            <input type="text" class="form-control" placeholder="What is this about?" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" rows="4" placeholder="Type your message here..."></textarea>
+          </div>
+          <button class="btn-submit" onclick="submitForm()">📨 Send Message</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Google Maps embed placeholder -->
+    <div class="mt-4 about-box p-0 overflow-hidden">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3401.6!2d74.3587!3d31.5204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzHCsDMxJzEzLjQiTiA3NMKwMjEnMzEuMyJF!5e0!3m2!1sen!2s!4v1"
+        width="100%" height="300" style="border:0;display:block;" allowfullscreen loading="lazy">
+      </iframe>
+    </div>
+
+  </div>
+</div><!-- /contact -->
+
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+  <p>📚 <strong>Universal Stationary</strong> — Lahore, Pakistan</p>
+  <p style="margin-top:8px">
+    <a href="#" onclick="showPage('home')">Home</a>
+    <a href="#" onclick="showPage('about')">About</a>
+    <a href="#" onclick="showPage('products')">Products</a>
+    <a href="#" onclick="showPage('contact')">Contact</a>
+  </p>
+  <p style="margin-top:8px; font-size:13px; opacity:0.7">© 2025 Universal Stationary. All rights reserved.</p>
+</footer>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // ── Show/hide pages ──
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Show product detail ──
+  function showDetail(id) {
+    // Hide all detail boxes first
+    document.querySelectorAll('.detail-box').forEach(d => d.classList.remove('show'));
+    // Show the clicked one
+    var box = document.getElementById('detail-' + id);
+    if (box) {
+      box.classList.add('show');
+      box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // ── Brand filter on Brands page ──
+  function filterBrand(brand, btn) {
+    // Update active button
+    document.querySelectorAll('.brand-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show/hide product cards
+    document.querySelectorAll('#brand-grid [data-brand]').forEach(card => {
+      if (brand === 'all' || card.getAttribute('data-brand') === brand) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // ── Contact form submit ──
+  function submitForm() {
+    alert('Shukriya! Aapka message bhej diya gaya. Hum jald hi contact karenge.');
+  }
+</script>
+
+</body>
+</html>z
